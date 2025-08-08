@@ -10,8 +10,8 @@ def get_args():
     parser = argparse.ArgumentParser(description="Federated Learning with Prompt Tuning")
 
     parser.add_argument('--setup', default="local")
-    #parser.add_argument('--device', type=str, default="cuda" if torch.cuda.is_available() else "cpu") # if runing on GPU 
-    parser.add_argument('--device',default="mps" if torch.backends.mps.is_available() else "cpu")# if runing on mps MAC OS
+    parser.add_argument('--device', type=str, default="cuda" if torch.cuda.is_available() else "cpu") # if runing on GPU 
+    #parser.add_argument('--device',default="mps" if torch.backends.mps.is_available() else "cpu")# if runing on mps MAC OS
     parser.add_argument('--num_clients', type=int, default=1)
     parser.add_argument('--local_model_name', type=str, default="ResNet18")
     parser.add_argument('--num_train_samples', type=int, default=100)
@@ -25,7 +25,7 @@ def get_args():
     parser.add_argument('--global_learning_rate', type=float, default=0.01)
     parser.add_argument('--global_batch_size', type=int, default=1)
     
-    parser.add_argument('--global_epochs', type=int, default=1000)
+    parser.add_argument('--global_epochs', type=int, default=400)
     parser.add_argument('--num_generated_images', type=int, default= 64)
     parser.add_argument('--generator_name', type=str, default="VQGAN")
     
