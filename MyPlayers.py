@@ -38,6 +38,11 @@ class Server():
     
     def train_decoder(self, num_classes):
         self.zs = []
+    
+        # Ensure main folders exist at the start
+        os.makedirs("plots", exist_ok=True)
+        os.makedirs("saved_images", exist_ok=True)
+        os.makedirs("saved_zs", exist_ok=True)
         
         for c in range(1):  # range(num_classes)
             print(30*"-", f"Training for class {c}", 30*"-")
@@ -59,19 +64,19 @@ class Server():
                     self.optimizer.step()                
                     self.Loss.append(loss.item())
     
-                # Ensure directories exist before saving
+                # Ensure class-specific folders exist
                 os.makedirs(f"saved_images/class_{c}", exist_ok=True)
                 os.makedirs(f"saved_zs/class_{c}", exist_ok=True)
     
                 self.save_image(class_num=c, image_num=i)
                 self.zs.append(self.model.z)
-        
+    
     
     def save_image(self, class_num, image_num):
         out = self.get_generated_images()    
         out = out.permute(0, 2, 3, 1)
         
-        # save the first image for fun
+        # Normalize and save the first image
         image = out[0]
         image = (image - image.min()) / (image.max() - image.min())
         image = image.detach().cpu().numpy()
