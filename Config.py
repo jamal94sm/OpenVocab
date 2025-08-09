@@ -25,7 +25,7 @@ def get_args():
     parser.add_argument('--global_learning_rate', type=float, default=0.01)
     parser.add_argument('--global_batch_size', type=int, default=1)
     
-    parser.add_argument('--global_epochs', type=int, default=400)
+    parser.add_argument('--global_epochs', type=int, default=1000)
     parser.add_argument('--num_generated_images', type=int, default= 64)
     parser.add_argument('--generator_name', type=str, default="VQGAN")
     
