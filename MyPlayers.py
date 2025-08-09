@@ -63,6 +63,9 @@ class Server():
     
                     self.Loss.append(loss.item())
                     
+                # Ensure directory exists before saving
+                folder = f"saved_images/class_{c}"
+                os.makedirs(folder, exist_ok=True)
                 
                 self.save_image(class_num = c, image_num = i)
                 self.zs.append(self.model.z)
