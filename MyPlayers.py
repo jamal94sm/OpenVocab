@@ -53,7 +53,7 @@ class Server():
                     self.optimizer.zero_grad()
                     
                     logits = self.model(inference=False) 
-                    loss = self.loss_fn(logits, label)
+                    loss = self.loss_fn(logits, label.long())
                     
     
                     loss.backward()
