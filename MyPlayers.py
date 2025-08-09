@@ -39,38 +39,34 @@ class Server():
     def train_decoder(self, num_classes):
         self.zs = []
         
-                
-        for c in range(1): #range(num_classes):            
+        for c in range(1):  # range(num_classes)
             print(30*"-", f"Training for class {c}", 30*"-")
             
-            label = c*torch.ones(1).to(args.device)
+            label = c * torch.ones(1).to(args.device)
             self.Loss = []
-
+    
             for i in range(args.num_generated_images):
-                self.model.z = torch.nn.Parameter(torch.randn(1, 256, 16, 16, requires_grad=True, device=args.device))   
+                self.model.z = torch.nn.Parameter(
+                    torch.randn(1, 256, 16, 16, requires_grad=True, device=args.device)
+                )   
                 
                 for step in range(args.global_epochs):
-                    
                     self.optimizer.zero_grad()
-                    
                     logits = self.model(inference=False) 
                     loss = self.loss_fn(logits, label.long())
-                    
     
                     loss.backward()
                     self.optimizer.step()                
-                    
-                    
-    
                     self.Loss.append(loss.item())
-                    
-                # Ensure directory exists before saving
-                folder = f"saved_images/class_{c}"
-                os.makedirs(folder, exist_ok=True)
-                
-                self.save_image(class_num = c, image_num = i)
+    
+                # Ensure directories exist before saving
+                os.makedirs(f"saved_images/class_{c}", exist_ok=True)
+                os.makedirs(f"saved_zs/class_{c}", exist_ok=True)
+    
+                self.save_image(class_num=c, image_num=i)
                 self.zs.append(self.model.z)
-            
+        
+    
     def save_image(self, class_num, image_num):
         out = self.get_generated_images()    
         out = out.permute(0, 2, 3, 1)
@@ -79,10 +75,10 @@ class Server():
         image = out[0]
         image = (image - image.min()) / (image.max() - image.min())
         image = image.detach().cpu().numpy()
-        plt.imsave(f"saved_images/class_{class_num} image_{image_num}.png", image)  
+        plt.imsave(f"saved_images/class_{class_num}/image_{image_num}.png", image)  
         
-        torch.save(self.zs, f"saved_zs/class_{class_num} tensor_{image_num}.pt")
-    
+        torch.save(self.zs, f"saved_zs/class_{class_num}/tensor_{image_num}.pt")
+        
     
     def distill_generator(self, logits):
         teacher_knowledge = logits
